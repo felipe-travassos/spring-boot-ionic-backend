@@ -13,11 +13,11 @@ public class CategoriaService {
 
 	@Autowired
 	private CategoriaRepository repo;
-	
-	//Metodo buscar o id da categoria no metodo GET
+
+	// Metodo buscar o id da categoria no metodo GET
 	public Categoria find(Integer id) {
-		Optional <Categoria> obj = repo.findById(id);
+		Optional<Categoria> obj = repo.findById(id);
 		return obj.orElse(null);
 	}
-	
+
 }

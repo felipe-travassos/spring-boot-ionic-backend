@@ -1,9 +1,6 @@
 package br.com.felipetravassos.cursomc.resources;
 //Resources é um nome padrão que grava as controladoras REST.
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
