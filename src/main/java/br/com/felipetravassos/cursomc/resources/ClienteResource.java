@@ -30,17 +30,6 @@ public class ClienteResource {
 
 		Cliente obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
-
-//		Cliente cat1 = new Cliente(1, "Informática");
-//		Cliente cat2 = new Cliente(2, "Escritorio");
-//
-//		List<Cliente> lista = new ArrayList<>();// List é uma interface e
-//													// não pode ser importado
-//													// ArrayList implementa uma lista.
-//		lista.add(cat1);
-//		lista.add(cat2);
-//
-//		return lista;
 	}
 
 }

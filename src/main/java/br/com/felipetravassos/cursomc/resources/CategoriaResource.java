@@ -1,9 +1,12 @@
 package br.com.felipetravassos.cursomc.resources;
 //Resources é um nome padrão que grava as controladoras REST.
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 //Representational State Transfer, abreviado como REST, 
 //não é uma tecnologia, uma biblioteca, e nem tampouco 
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.felipetravassos.cursomc.domain.Categoria;
 import br.com.felipetravassos.cursomc.services.CategoriaService;
@@ -45,4 +49,13 @@ public class CategoriaResource {
 //		return lista;
 	}
 
+	// Resposta com corpo vazio ResponseEntity<void>
+	// Insert vai recaber um objeto do tipo Categoria.
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@RequestBody Categoria obj) {
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/id").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
 }

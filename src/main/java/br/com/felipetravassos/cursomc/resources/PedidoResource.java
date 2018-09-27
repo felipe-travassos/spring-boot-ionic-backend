@@ -32,17 +32,6 @@ public class PedidoResource {
 
 		Pedido obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
-
-//		Categoria cat1 = new Categoria(1, "Informática");
-//		Categoria cat2 = new Categoria(2, "Escritorio");
-//
-//		List<Categoria> lista = new ArrayList<>();// List é uma interface e
-//													// não pode ser importado
-//													// ArrayList implementa uma lista.
-//		lista.add(cat1);
-//		lista.add(cat2);
-//
-//		return lista;
 	}
 
 }
