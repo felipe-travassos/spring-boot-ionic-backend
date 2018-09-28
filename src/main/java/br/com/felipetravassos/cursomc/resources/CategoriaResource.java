@@ -2,25 +2,22 @@ package br.com.felipetravassos.cursomc.resources;
 //Resources é um nome padrão que grava as controladoras REST.
 
 import java.net.URI;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import br.com.felipetravassos.cursomc.domain.Categoria;
+import br.com.felipetravassos.cursomc.services.CategoriaService;
 
 //Representational State Transfer, abreviado como REST, 
 //não é uma tecnologia, uma biblioteca, e nem tampouco 
 //uma arquitetura, mas sim um modelo a ser utilizado para 
 //se projetar arquiteturas de software distribuído, baseadas 
 //em comunicação via rede.
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import br.com.felipetravassos.cursomc.domain.Categoria;
-import br.com.felipetravassos.cursomc.services.CategoriaService;
 
 @RestController // Diretiva Controlador REST que vai responder pelo End Point abaixo.
 @RequestMapping(value = "/categorias") // End point REST
@@ -37,25 +34,23 @@ public class CategoriaResource {
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 
-//		Categoria cat1 = new Categoria(1, "Informática");
-//		Categoria cat2 = new Categoria(2, "Escritorio");
-//
-//		List<Categoria> lista = new ArrayList<>();// List é uma interface e
-//													// não pode ser importado
-//													// ArrayList implementa uma lista.
-//		lista.add(cat1);
-//		lista.add(cat2);
-//
-//		return lista;
 	}
 
-	// Resposta com corpo vazio ResponseEntity<void>
+	// Resposta com corpo vazio ResponseEntity<Void>
 	// Insert vai recaber um objeto do tipo Categoria.
+	// Metodo de inserção de dados
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Categoria obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/id").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 }
