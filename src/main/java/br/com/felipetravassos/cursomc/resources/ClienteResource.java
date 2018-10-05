@@ -1,20 +1,20 @@
 package br.com.felipetravassos.cursomc.resources;
 //Resources é um nome padrão que grava as controladoras REST.
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.felipetravassos.cursomc.domain.Cliente;
+import br.com.felipetravassos.cursomc.dto.ClienteDTO;
 import br.com.felipetravassos.cursomc.services.ClienteService;
-
-//Representational State Transfer, abreviado como REST, 
-//não é uma tecnologia, uma biblioteca, e nem tampouco 
-//uma arquitetura, mas sim um modelo a ser utilizado para 
-//se projetar arquiteturas de software distribuído, baseadas 
-//em comunicação via rede.
 
 @RestController // Diretiva Controlador REST que vai responder pelo End Point abaixo.
 @RequestMapping(value = "/clientes") // End point REST
@@ -25,11 +25,40 @@ public class ClienteResource {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		// ResponseEntity Tipo especial no spring que armazena as
-		// respostas de um serviço REST no HTTP
-
 		Cliente obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Cliente obj, @PathVariable Integer id) {
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<ClienteDTO>> findAll() {
+		List<Cliente> list = service.findAll();
+		List<ClienteDTO> listDto = list.stream().map(obj -> new ClienteDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+
+	}
+
+	// EndPoint de paginação de busca ao BD
+	@RequestMapping(value = "/page", method = RequestMethod.GET)
+	public ResponseEntity<Page<ClienteDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+		Page<Cliente> list = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<ClienteDTO> listDto = list.map(obj -> new ClienteDTO(obj));
+		return ResponseEntity.ok().body(listDto);
+
+	}
 }
