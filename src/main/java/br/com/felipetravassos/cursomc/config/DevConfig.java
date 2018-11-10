@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.com.felipetravassos.cursomc.services.DBService;
+import br.com.felipetravassos.cursomc.services.EmailService;
+import br.com.felipetravassos.cursomc.services.SmtpEmailService;
 
 @Configuration
 @Profile("dev")
@@ -22,13 +24,18 @@ public class DevConfig {
 
 	@Bean
 	public boolean InstantiateDatabase() throws ParseException {
-		
-		if(!"create".equals(strategy)) {
+
+		if (!"create".equals(strategy)) {
 			return false;
 		}
-		
+
 		dbService.instantiateTestDatabase();
 		return true;
+	}
+
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 
 }
